@@ -46,11 +46,11 @@ module Jabber
     #
     #   # A confiugured MUC Bot.
     #   bot = Jabber::MUCBot.new(
-    #     :nick      => 'bot',
-    #     :password  => 'secret',
-    #     :server    => 'example.com',
-    #     :room      => 'myroom',
-    #     :debug => true # optional
+    #     :nick     => 'bot',
+    #     :password => 'secret',
+    #     :server   => 'example.com',
+    #     :room     => 'myroom',
+    #     :debug    => true # optional
     #   )
     #
     def initialize(config)
@@ -170,7 +170,7 @@ module Jabber
     # It will create the bot, connect and join it to the room.
     # a block can be given to customize the bot before initialization.
     #
-    #   MUCBot.start config do |bot|
+    #   Jabber::MUCBot.start config do |bot|
     #     bot.welcome { |guy| "Hello #{guy}!" }
     #     bot.on(/^me$/) do |sender, message|
     #       bot.send("You are #{sender}!")

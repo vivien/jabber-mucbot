@@ -39,26 +39,21 @@ config = {
   :room     => 'myroom'
 }
 
-# Create a new bot
-bot = Jabber::MUCBot.new(config)
-
-# Give the bot a private command, 'puts', with a response message
-bot.add_command(/^puts\s+.+$/) do |sender, message|
-  puts "#{sender} says #{message}."
-  "'#{message}' written to $stdout."
+# Directly start a new bot
+Jabber::MUCBot.start config do |bot|
+  # Give the bot a private command, 'puts', with a response message
+  bot.on(/^puts\s+.+$/) do |sender, message|
+    puts "#{sender} says #{message}."
+    "'#{message}' written to $stdout."
+  end
+  # Give the bot another private command, 'puts!', without a response message
+  bot.on(/^puts!\s+.+$/) do |sender, message|
+    puts "#{sender} says #{message}."
+    nil
+  end
+  # Give the bot a public command, 'rand'
+  bot.on(/^rand$/) { rand(10).to_s }
+  # Add a customized welcome message
+  bot.welcome { |guy| "Hello #{guy}!" }
 end
 
-# Give the bot another private command, 'puts!', without a response message
-bot.add_command(/^puts!\s+.+$/) do |sender, message|
-  puts "#{sender} says #{message}."
-  nil
-end
-
-# Give the bot a public command, 'rand'
-bot.add_command(/^rand$/) { rand(10).to_s }
-
-# Add a customized welcome message
-bot.welcome { |guy| "Hello #{guy}!" }
-
-# Unleash the bot
-bot.join
