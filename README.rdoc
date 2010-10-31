@@ -11,7 +11,7 @@ Bots are created by defining commands powered by regular expressions and Ruby.
 
 *Author*::    Brett Stimmerman (mailto:brettstimmerman@gmail.com)
 *Author*::    Vivien Didelot (mailto:vivien.didelot@gmail.com)
-*Version*::   1.1.1
+*Version*::   0.0.1
 *Copyright*:: Copyright (c) 2009 Brett Stimmerman. All rights reserved.
 *License*::   New BSD License (http://opensource.org/licenses/bsd-license.php)
 *Website*::   http://github.com/brettstimmerman/jabber-bot
@@ -28,7 +28,7 @@ Bots are created by defining commands powered by regular expressions and Ruby.
 
   # Create a public Jabber::MUCBot
   config = {
-    :nick      => 'SampleBot',
+    :nick      => 'bot',
     :password  => 'secret',
     :server    => 'example.org',
     :room      => 'room'
@@ -53,7 +53,7 @@ Bots are created by defining commands powered by regular expressions and Ruby.
 
 All that can be done faster with the class method +start+.
 
-  MUCBot.start config do |bot|
+  Jabber::MUCBot.start config do |bot|
     bot.on(/^rand$/) { rand(10).to_s }
     bot.on(/^puts\s+.+$/) do |sender, message|
       puts "#{sender} says '#{message}'"
