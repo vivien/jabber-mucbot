@@ -62,7 +62,7 @@ module Jabber
     #
     def initialize(config)
       @config = config
-      @config[:keep_alive] ||= true
+      @config[:keep_alive] = true unless @config.hey? :keep_alive
       Jabber.debug = @config[:debug] || false
       @commands = []
 
