@@ -40,23 +40,31 @@ module Jabber
     # You may optionally give a +debug+ option. If it is omitted, it will be
     # set to false and no debug messages will be printed.
     #
+    # You may optionally give a +keep_alive+ option. If it is omitted,
+    # it will be set to true and Thread.stop will be called.
+    # That is useful to set it to false if you have a main loop
+    # in your bot algorithm or if you simply want to call others methods
+    # like :send after join.
+    #
     # The bot will be +public+.
     #
     # By default, a Jabber::MUCBot has no command.
     #
     #   # A confiugured MUC Bot.
     #   bot = Jabber::MUCBot.new(
-    #     :nick     => 'bot',
-    #     :password => 'secret',
-    #     :server   => 'example.com',
-    #     :room     => 'myroom',
-    #     :debug    => true # optional
+    #     :nick       => 'bot',
+    #     :password   => 'secret',
+    #     :server     => 'example.com',
+    #     :room       => 'myroom',
+    #     :debug      => true, # optional
+    #     :keep_alive => true # optional
     #   )
     #
     def initialize(config)
       @config = config
-      @commands = []
+      @config[:keep_alive] ||= true
       Jabber.debug = @config[:debug] || false
+      @commands = []
 
       connect
 
@@ -131,7 +139,12 @@ module Jabber
       end
 
       # Keep alive the current thread
-      Thread.stop
+      # NOTE Thread.stop is needed if the bot has no main loop.
+      # If it has, this line is not needed.
+      # Another problem with this line is that commands like
+      # bot.send() won't work after this line.
+      # Only pre-added commands will work.
+      Thread.stop if @config[:keep_alive]
     end
 
     # Send a message to the room.
