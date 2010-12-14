@@ -228,10 +228,10 @@ module Jabber
     def parse_command(sender, message) #:nodoc:
       @commands.each do |command|
         unless (message.strip =~ command[:regex]).nil?
-          params = nil
-          if message.include? ' '
-            params = message.sub(/^\S+\s+(.*)$/, '\1')
-          end
+          params = message
+          #if message.include? ' '
+            #params = message.sub(/^\S+\s+(.*)$/, '\1')
+          #end
 
           response = command[:callback].call(sender, params)
           send(response) unless response.nil?
