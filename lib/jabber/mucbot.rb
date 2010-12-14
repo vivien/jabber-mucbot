@@ -37,6 +37,9 @@ module Jabber
     # Creates a new Jabber::MUCBot object with the specified +config+ Hash,
     # which must contain +nick+, +password+, +server+, and +room+ at a minimum.
     #
+    # If you do not pass an explicit +jid+, the default of +nick+@+server+ will
+    # be used.
+    #
     # You may optionally give a +debug+ option. If it is omitted, it will be
     # set to false and no debug messages will be printed.
     #
@@ -202,8 +205,9 @@ module Jabber
       nick = @config[:nick]
       serv = @config[:server]
       pass = @config[:password]
+      jid  = @config[:jid] or "#{nick}@#{serv}"
 
-      jid = Jabber::JID.new(nick + '@' + serv)
+      jid = Jabber::JID.new(jid)
       @jabber = Jabber::Client.new(jid)
       @jabber.connect
       @jabber.auth(pass)
