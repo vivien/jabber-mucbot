@@ -72,16 +72,26 @@ module Jabber
     #
     def initialize(config)
       @config = config
+      # Sets keep_alive true by default or use the one from the config hash.
       @config[:keep_alive] = true unless @config.key? :keep_alive
+      # Parses :nick and :server if a :jid key is given,
+      # else build :jid from :nick and :server.
       if @config.key? :jid
         @config[:nick] = @config[:jid].split('@').first
         @config[:server] = @config[:jid].split('@').last
+      else
+        @config[:jid] = "#{@config[:nick]}@#{@config[:server]}"
       end
 
       Jabber.debug = @config[:debug] || false
+
       @commands = []
 
-      connect
+      # Connect the bot to the server.
+      jid = Jabber::JID.new(@config[:jid])
+      @jabber = Jabber::Client.new(jid)
+      @jabber.connect
+      @jabber.auth(@config[:password])
 
       @room = Jabber::MUC::MUCClient.new(@jabber)
     end
@@ -211,19 +221,6 @@ module Jabber
     end
 
     private
-
-    # Connect the bot to the server.
-    def connect #:nodoc:
-      nick = @config[:nick]
-      serv = @config[:server]
-      pass = @config[:password]
-      jid  = @config[:jid] || "#{nick}@#{serv}"
-
-      jid = Jabber::JID.new(jid)
-      @jabber = Jabber::Client.new(jid)
-      @jabber.connect
-      @jabber.auth(pass)
-    end
 
     def message_valid?(message) #:nodoc:
       message.type == :groupchat &&
