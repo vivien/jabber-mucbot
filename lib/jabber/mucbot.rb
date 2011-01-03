@@ -205,7 +205,7 @@ module Jabber
       nick = @config[:nick]
       serv = @config[:server]
       pass = @config[:password]
-      jid  = @config[:jid] or "#{nick}@#{serv}"
+      jid  = @config[:jid] || "#{nick}@#{serv}"
 
       jid = Jabber::JID.new(jid)
       @jabber = Jabber::Client.new(jid)
