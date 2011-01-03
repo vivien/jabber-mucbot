@@ -35,7 +35,7 @@ module Jabber
   class MUCBot
 
     # Creates a new Jabber::MUCBot object with the specified +config+ Hash,
-    # which must contain +nick+, +password+, +server+, and +room+ at a minimum.
+    # which must contain +nick+ and +server+ (or +jid+), +password+, and +room+ at a minimum.
     #
     # If you do not pass an explicit +jid+, the default of +nick+@+server+ will
     # be used.
@@ -53,7 +53,7 @@ module Jabber
     #
     # By default, a Jabber::MUCBot has no command.
     #
-    #   # A confiugured MUC Bot.
+    #   # A configured MUC Bot.
     #   bot = Jabber::MUCBot.new(
     #     :nick       => 'bot',
     #     :password   => 'secret',
@@ -63,9 +63,21 @@ module Jabber
     #     :keep_alive => true # optional
     #   )
     #
+    #   # Or with a jid:
+    #   bot = Jabber::MUCBot.new(
+    #     :jid      => 'bot@example.com',
+    #     :password => 'secret',
+    #     :room     => 'myroom'
+    #   )
+    #
     def initialize(config)
       @config = config
       @config[:keep_alive] = true unless @config.key? :keep_alive
+      if @config.key? :jid
+        @config[:nick] = @config[:jid].split('@').first
+        @config[:server] = @config[:jid].split('@').last
+      end
+
       Jabber.debug = @config[:debug] || false
       @commands = []
 
