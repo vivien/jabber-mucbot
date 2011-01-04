@@ -147,11 +147,6 @@ module Jabber
       }
     end
 
-    # :on is an alias for :add_command.
-    # So the rand command could be given with:
-    # on(/^rand$/) { rand(10).to_s }
-    alias :on :add_command
-
     # Join the bot to the room and enable callbacks.
     def join
       nick = @config[:nick]
@@ -214,22 +209,6 @@ module Jabber
         response = callback.call(message.from.resource)
         send(response) unless response.nil?
       end
-    end
-
-    # This class method is a short hand to fastly set up a bot.
-    # It will create the bot, connect and join it to the room.
-    # a block can be given to customize the bot before initialization.
-    #
-    #   Jabber::MUCBot.start config do |bot|
-    #     bot.welcome { |guy| "Hello #{guy}!" }
-    #     bot.on(/^me$/) do |sender, message|
-    #       bot.send("You are #{sender}!")
-    #     end
-    #   end
-    def self.start(config)
-      bot = MUCBot.new(config)
-      yield bot if block_given?
-      bot.join
     end
 
     private

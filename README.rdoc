@@ -51,13 +51,3 @@ Bots are created by defining commands powered by regular expressions and Ruby.
   # Bring your new bot to life
   bot.join
 
-All that can be done faster with the class method +start+.
-
-  Jabber::MUCBot.start config do |bot|
-    bot.on(/^rand$/) { rand(10).to_s }
-    bot.on(/^puts\s+.+$/) do |sender, message|
-      puts "#{sender} says '#{message}'"
-      "'#{message}' written to $stdout"
-    end
-    bot.welcome { |guy| "Hello #{guy}!" }
-  end
