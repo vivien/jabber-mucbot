@@ -102,9 +102,13 @@ module Jabber
     # The regular expression (+regex+) is used to detect the presence of
     # the command in an incoming message.
     #
+    # The command parameters will be parsed from text between () in the regex.
+    # e.g. giving /^cmd\s(.+)$/ will gives the parameter. If there was more than
+    # one occurrence, an array would be given.
+    #
     # The specified callback block will be triggered when the bot receives a
     # message that matches the given command regex. The callback block
-    # will have access to the sender and the message text (not including
+    # will have access to the sender and the parameters (not including
     # the command itsef), and should either return a String response
     # or +nil+. If a callback block returns a String response, the response will
     # be sent to the room.
@@ -113,19 +117,27 @@ module Jabber
     #
     #   # Say 'puts foo' and 'foo' will be written to $stdout.
     #   # The bot will also respond with "'foo' written to $stdout."
-    #   add_command(/^puts\s+.+$/) do |sender, message|
+    #   add_command(/^puts\s+(.+)$/) do |sender, message|
     #     puts "#{sender} says #{message}."
     #     "'#{message}' written to $stdout."
     #   end
     #
     #   # 'puts!' is a non-responding version of 'puts'.
-    #   add_command(/^puts!\s+.+$/) do |sender, message|
+    #   add_command(/^puts!\s+(.+)$/) do |sender, message|
     #     puts "#{sender} says #{message}."
     #     nil
     #   end
     #
     #  # 'rand' is a command that produces a random number from 0 to 10
     #  add_command(/^rand$/) { rand(10).to_s }
+    #
+    #  # 'rand2 <min> <max>' is a command that produces a random number from <min> to <max>
+    #  add_command(/^rand2\s+(\d+)\s+(\d+)$/) { |sender, params|
+    #    min = params.first.to_i
+    #    max = params.last.to_i
+    #
+    #    rand(max - min) + min
+    #  }
     #
     def add_command(regex, &callback)
       # Add the command spec - used for parsing incoming commands.
@@ -231,16 +243,17 @@ module Jabber
 
     # Parses the given command message for the presence of a known command by
     # testing it against each known command's regex. If a known command is
-    # found, the command parameters are passed on to the callback block, minus
-    # the command trigger. If a String result is present it is sent to the
-    # sender.
+    # found, the command parameters are passed on to the callback block like this:
+    # nil if there is no parameter, the parameter string if there is just one occurrence,
+    # or an array if there is more than one occurence.
+    # parsed from text occurrences between () in the given regex.
+    # If a String result is present it is sent to the sender.
     def parse_command(sender, message) #:nodoc:
       @commands.each do |command|
-        unless (message.strip =~ command[:regex]).nil?
-          params = message
-          #if message.include? ' '
-            #params = message.sub(/^\S+\s+(.*)$/, '\1')
-          #end
+        match = message.strip.match(command[:regex])
+        unless match.nil?
+          # Gives nil, a string or an array depending on captures size.
+          params = (match.captures.size <= 1) ? match.captures.first : match.captures
 
           response = command[:callback].call(sender, params)
           send(response) unless response.nil?
