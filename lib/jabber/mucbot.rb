@@ -211,6 +211,13 @@ module Jabber
       @jabber = Jabber::Client.new(jid)
       @jabber.connect
       @jabber.auth(pass)
+
+      @jabber.on_exception do |excp, stream, where|
+        @jabber.connect
+        @jabber.auth(pass)
+
+        join
+      end
     end
 
     def message_valid?(message) #:nodoc:
