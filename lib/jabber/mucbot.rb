@@ -222,9 +222,9 @@ module Jabber
 
     def message_valid?(message) #:nodoc:
       message.type == :groupchat &&
-        not message.from.resource.nil? &&
+        !message.from.resource.nil? &&
         message.from.resource != @config[:nick] &&
-        not message.body.nil? && not message.first_element('delay')
+        !message.body.nil? && !message.first_element('delay')
     end
 
     # Parses the given command message for the presence of a known command by
