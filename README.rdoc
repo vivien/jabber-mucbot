@@ -50,4 +50,3 @@ Bots are created by defining commands powered by regular expressions and Ruby.
 
   # Bring your new bot to life
   bot.join
-
