@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'jabber-mucbot'
 
   s.files = [
-    'HISTORY',
     'LICENSE',
     'README.rdoc',
     'lib/jabber/mucbot.rb'
@@ -21,13 +20,7 @@ Gem::Specification.new do |s|
 
   s.require_path = 'lib'
 
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'HISTORY']
-  s.rdoc_options << '--title' << 'Jabber::MUCBot Documentation' <<
-                    '--main' << 'README.rdoc' <<
-                    '--line-numbers'
-
   s.required_ruby_version = '>=1.8.4'
 
-  s.add_dependency('xmpp4r-simple', '>=0.8.7')
+  s.add_dependency('xmpp4r')
 end

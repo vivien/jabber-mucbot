@@ -2,18 +2,16 @@
 
 Easily create simple regex powered Jabber Multi Users Chat bots.
 
-This bot has been forked from Brett Stimmerman's Jabber::Bot.
+This bot has been forked from {Brett Stimmerman's Jabber::Bot}[https://github.com/brettstimmerman/jabber-bot].
 The purpose is to create an even simpler MUC bot.
 It will be able to join a room and execute public command.
 
 Jabber::MUCBot makes it simple to create and command your own Jabber MUC bot.
 Bots are created by defining commands powered by regular expressions and Ruby.
 
-*Author*::    Brett Stimmerman (mailto:brettstimmerman@gmail.com)
 *Author*::    Vivien Didelot (mailto:vivien.didelot@gmail.com)
 *Version*::   0.0.1
-*Copyright*:: Copyright (c) 2009 Brett Stimmerman. All rights reserved.
-*License*::   New BSD License (http://opensource.org/licenses/bsd-license.php)
+*License*::   The Beer-Ware license
 *Website*::   http://github.com/v0n/jabber-mucbot
 
 == Requires
